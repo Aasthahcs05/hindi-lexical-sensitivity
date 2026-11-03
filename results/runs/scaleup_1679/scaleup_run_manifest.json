@@ -1,0 +1,59 @@
+{
+  "start_time_utc": "2026-11-02T15:28:38.734304+00:00",
+  "device": "cuda",
+  "device_name": "NVIDIA GeForce RTX 3050 6GB Laptop GPU",
+  "stages": {
+    "stage2_tokenization": {
+      "elapsed_seconds": 6.51,
+      "total_evaluations": 3358,
+      "output_csv": "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\results\\runs\\scaleup_1679\\tokenization\\tokenization_results.csv"
+    },
+    "stage3_pll_scoring": {
+      "elapsed_seconds": 207.1,
+      "total_evaluations": 3358,
+      "output_csv": "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\results\\runs\\scaleup_1679\\scoring\\pll_scoring_results.csv"
+    },
+    "stage4_combined_analysis": {
+      "elapsed_seconds": 2.63,
+      "merged_rows": 3358,
+      "warnings_count": 0,
+      "figures_dir": "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\results\\runs\\scaleup_1679\\analysis\\figures"
+    },
+    "stage6_stability": {
+      "elapsed_seconds": 99.15,
+      "total_pair_evaluations": 4020,
+      "output_dir": "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\results\\runs\\scaleup_1679\\stability"
+    },
+    "stage7_faithfulness": {
+      "elapsed_seconds": 1277.68,
+      "total_interventions": 72360,
+      "output_dir": "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\results\\runs\\scaleup_1679\\faithfulness"
+    },
+    "stage8_dashboard_data": {
+      "elapsed_seconds": 1.4,
+      "pair_master_row_count": 3358,
+      "dashboard_dir": "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\results\\runs\\scaleup_1679\\dashboard_data"
+    },
+    "figures_generation": {
+      "elapsed_seconds": 1.79,
+      "figures_generated": [
+        "fig6_explanation_stability.png",
+        "fig7_faithfulness_interventions.png",
+        "fig8_stability_vs_faithfulness.png"
+      ],
+      "all_figures_dir": "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\results\\runs\\scaleup_1679\\figures"
+    },
+    "secondary_template_benchmark": {
+      "elapsed_seconds": 237.5,
+      "output_dir": "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\results\\runs\\scaleup_1679\\template_sensitivity"
+    },
+    "auxiliary_multiword_probe": {
+      "elapsed_seconds": 289.75,
+      "output_dir": "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\results\\runs\\scaleup_1679\\auxiliary_probe"
+    }
+  },
+  "end_time_utc": "2026-11-02T16:04:02.402769+00:00",
+  "total_elapsed_seconds": 2123.69,
+  "total_elapsed_minutes": 35.39,
+  "completed_successfully": true
+}

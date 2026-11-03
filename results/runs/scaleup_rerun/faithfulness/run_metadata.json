@@ -1,0 +1,41 @@
+{
+  "run_timestamp_utc": "2026-11-02T17:23:42.108862+00:00",
+  "input_dataset": "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\data\\final\\PRIMARY_BENCHMARK_ADJUDICATED.csv",
+  "input_sha256": "b769ccd82ee00b7930c8f32a7666e5d16897d0afc8c10c1cc97633334717fe18",
+  "models_evaluated": [
+    "google/muril-base-cased",
+    "FacebookAI/xlm-roberta-base"
+  ],
+  "track_filter": "REALISTIC_SPELLING_ERROR",
+  "target_definition": "visible_target_mean_subword_logit",
+  "explanation_methods": [
+    "attention",
+    "integrated_gradients"
+  ],
+  "masking_fractions": [
+    0.1,
+    0.2,
+    0.3
+  ],
+  "rounding_policy": "k = max(1, round(fraction * n_context))",
+  "ig_n_steps": 20,
+  "total_source_pairs_evaluated": 1005,
+  "total_intervention_records": 72360,
+  "output_files": [
+    "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\results\\runs\\scaleup_rerun\\faithfulness\\faithfulness_pair_level.csv",
+    "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\results\\runs\\scaleup_rerun\\faithfulness\\faithfulness_summary.csv",
+    "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\results\\runs\\scaleup_rerun\\faithfulness\\eligibility_report.csv",
+    "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\results\\runs\\scaleup_rerun\\faithfulness\\stability_faithfulness_relationship.csv",
+    "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\results\\runs\\scaleup_rerun\\faithfulness\\run_metadata.json",
+    "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\results\\runs\\scaleup_rerun\\faithfulness\\stage7_report.md"
+  ],
+  "library_versions": {
+    "python": "3.13.5",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "transformers": "5.19.0",
+    "tokenizers": "0.23.3",
+    "sentencepiece": "not_installed",
+    "openpyxl": "not_installed"
+  },
+  "completed_successfully": true
+}

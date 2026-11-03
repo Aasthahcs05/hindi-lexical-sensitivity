@@ -1,0 +1,48 @@
+{
+  "run_timestamp_utc": "2026-11-02T17:28:45.125317+00:00",
+  "run_type": "full",
+  "completed_successfully": true,
+  "elapsed_seconds": 292.83500146865845,
+  "device": "cuda",
+  "batch_size": 32,
+  "models": [
+    "FacebookAI/xlm-roberta-base",
+    "google/muril-base-cased"
+  ],
+  "model_details": {
+    "FacebookAI/xlm-roberta-base": {
+      "model_class": "XLMRobertaForMaskedLM",
+      "tokenizer_class": "XLMRobertaTokenizer",
+      "vocab_size": 250002,
+      "status": "computed"
+    },
+    "google/muril-base-cased": {
+      "model_class": "BertForMaskedLM",
+      "tokenizer_class": "BertTokenizer",
+      "vocab_size": 197258,
+      "status": "computed"
+    }
+  },
+  "library_versions": {
+    "python": "3.13.5",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "transformers": "5.19.0",
+    "tokenizers": "0.23.3",
+    "sentencepiece": "not_installed",
+    "openpyxl": "not_installed"
+  },
+  "input_file": {
+    "path": "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\data\\final\\TEMPLATE_SENSITIVITY_BENCHMARK.csv",
+    "sha256": "b88160d39d1f7133391ff3aceff1faa2f157310833490e3765ae635c17e0155a",
+    "non_empty_rows": 1957
+  },
+  "scored_pairs_count": 1957,
+  "total_evaluations": 3914,
+  "output_files": {
+    "csv_path": "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\results\\runs\\scaleup_rerun\\template_sensitivity\\scoring\\pll_scoring_results.csv",
+    "csv_sha256": "bff68c9eb5b5e53bf74f494a0df2497433d884a0f83b4370467579f13093881b",
+    "metadata_path": "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\results\\runs\\scaleup_rerun\\template_sensitivity\\scoring\\run_metadata.json",
+    "summary_path": "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\results\\runs\\scaleup_rerun\\template_sensitivity\\scoring\\summary.md",
+    "checkpoint_path": "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\results\\runs\\scaleup_rerun\\template_sensitivity\\scoring\\checkpoint.json"
+  }
+}

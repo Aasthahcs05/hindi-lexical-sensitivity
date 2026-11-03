@@ -1,0 +1,27 @@
+{
+  "dataset_name": "hindi_lexical_sensitivity_cleaned.xlsx",
+  "dataset_sha256": "b769ccd82ee00b7930c8f32a7666e5d16897d0afc8c10c1cc97633334717fe18",
+  "total_source_pairs": 1679,
+  "tracks": {
+    "VALID_WORD_CONTEXT": 312,
+    "SYNONYM_SUBSTITUTION": 362,
+    "REALISTIC_SPELLING_ERROR": 1005
+  },
+  "final_statuses": {
+    "accept": 1679
+  },
+  "models_evaluated": [
+    "google/muril-base-cased",
+    "FacebookAI/xlm-roberta-base"
+  ],
+  "stages_completed": [
+    "Stage 1: Dataset Validation",
+    "Stage 2: Tokenization Analysis",
+    "Stage 3: Pretrained Model PLL Scoring",
+    "Stage 4: Combined Correlation & Statistical Analysis",
+    "Stage 5: Hindi Explanation Extraction Pilot",
+    "Stage 6: Fixed-Target Explanation Stability Under Spelling Errors",
+    "Stage 7: Visible-Target Faithfulness Evaluation",
+    "Stage 8: Final Scientific Audit & Dashboard Data Preparation"
+  ]
+}

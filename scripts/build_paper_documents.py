@@ -8,6 +8,27 @@ from docx.oxml.ns import nsdecls
 import re, os
 import sys
 
+def resolve_image_path(img_path):
+    if not img_path:
+        return None
+    if img_path.startswith('file:///'):
+        img_path = img_path.replace('file:///', '')
+    img_path = os.path.normpath(img_path)
+    if os.path.exists(img_path):
+        return img_path
+    base_name = os.path.basename(img_path)
+    candidates = [
+        os.path.join('outputs', 'analysis', 'figures', base_name),
+        os.path.join('results', 'runs', 'scaleup_rerun', 'figures', base_name),
+        os.path.join('research_paper', 'refined', 'figures', base_name),
+        os.path.join('research_paper', 'figures', base_name),
+        os.path.join('paper', 'figures', base_name),
+    ]
+    for cand in candidates:
+        if os.path.exists(cand):
+            return cand
+    return None
+
 def build_docx():
     print("Building research_paper.docx...")
     doc = Document()
@@ -30,7 +51,11 @@ def build_docx():
     font.size = Pt(11)
     font.color.rgb = RGBColor(0x22, 0x22, 0x22)
 
-    with open('research_paper/research_paper.md', 'r', encoding='utf-8') as f:
+    md_source = 'research_paper/research_paper.md'
+    if not os.path.exists(md_source) and os.path.exists('paper/research_paper.md'):
+        md_source = 'paper/research_paper.md'
+
+    with open(md_source, 'r', encoding='utf-8') as f:
         text = f.read()
 
     lines = text.split('\n')
@@ -75,11 +100,8 @@ def build_docx():
             m = re.match(r'!\[(.*?)\]\((.*?)\)', line)
             if m:
                 caption_text = m.group(1)
-                img_path = m.group(2)
-                if img_path.startswith('file:///'):
-                    img_path = img_path.replace('file:///', '')
-                img_path = os.path.normpath(img_path)
-                if os.path.exists(img_path):
+                img_path = resolve_image_path(m.group(2))
+                if img_path and os.path.exists(img_path):
                     p = doc.add_paragraph()
                     p.alignment = WD_ALIGN_PARAGRAPH.CENTER
                     p.paragraph_format.space_before = Pt(8)
@@ -154,6 +176,13 @@ def build_docx():
     out_docx = 'research_paper/research_paper.docx'
     doc.save(out_docx)
     print(f"DOCX successfully generated: {out_docx}")
+    try:
+        os.makedirs('paper', exist_ok=True)
+        import shutil
+        shutil.copyfile(out_docx, 'paper/research_paper.docx')
+        print("DOCX successfully copied to: paper/research_paper.docx")
+    except Exception as e:
+        print(f"Note: Could not copy DOCX to paper/: {e}")
 
 def build_pdf():
     print("Building research_paper.pdf with ReportLab...")
@@ -328,11 +357,8 @@ def build_pdf():
             m = re.match(r'!\[(.*?)\]\((.*?)\)', line)
             if m:
                 caption_text = m.group(1)
-                img_path = m.group(2)
-                if img_path.startswith('file:///'):
-                    img_path = img_path.replace('file:///', '')
-                img_path = os.path.normpath(img_path)
-                if os.path.exists(img_path):
+                img_path = resolve_image_path(m.group(2))
+                if img_path and os.path.exists(img_path):
                     # Aspect ratio preserving scaling to max width 6.8 inch
                     story.append(Spacer(1, 6))
                     story.append(RLImage(img_path, width=6.5 * inch, height=2.8 * inch))
@@ -410,6 +436,13 @@ def build_pdf():
 
     doc.build(story, canvasmaker=NumberedCanvas)
     print(f"PDF successfully generated: {pdf_filename}")
+    try:
+        os.makedirs('paper', exist_ok=True)
+        import shutil
+        shutil.copyfile(pdf_filename, 'paper/research_paper.pdf')
+        print("PDF successfully copied to: paper/research_paper.pdf")
+    except Exception as e:
+        print(f"Note: Could not copy PDF to paper/: {e}")
 
 if __name__ == '__main__':
     build_docx()

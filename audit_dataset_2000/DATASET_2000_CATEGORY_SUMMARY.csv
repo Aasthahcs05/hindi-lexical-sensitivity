@@ -1,0 +1,4 @@
+track,total_pairs,pct_of_dataset,accept_count,accept_pct,review_count,review_pct,reject_count,reject_pct
+VALID_WORD_CONTEXT,322,16.1,309,95.96,8,2.48,5,1.55
+SYNONYM_SUBSTITUTION,398,19.9,362,90.95,34,8.54,2,0.5
+REALISTIC_SPELLING_ERROR,1280,64.0,1005,78.52,267,20.86,8,0.62

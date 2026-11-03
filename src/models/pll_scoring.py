@@ -309,11 +309,28 @@ def load_checkpoint(checkpoint_file: Path) -> dict[str, dict[str, Any]]:
 
 
 def save_checkpoint(checkpoint_file: Path, checkpoint_data: dict[str, dict[str, Any]]) -> None:
-    """Save checkpoint atomically to disk."""
+    """Save checkpoint atomically to disk with Windows retry/fallback."""
     temp_file = checkpoint_file.with_suffix(".tmp")
-    with open(temp_file, "w", encoding="utf-8") as f:
-        json.dump(checkpoint_data, f, ensure_ascii=False, indent=2)
-    temp_file.replace(checkpoint_file)
+    try:
+        with open(temp_file, "w", encoding="utf-8") as f:
+            json.dump(checkpoint_data, f, ensure_ascii=False, indent=2)
+        for attempt in range(5):
+            try:
+                temp_file.replace(checkpoint_file)
+                return
+            except (PermissionError, OSError):
+                time.sleep(0.05 * (attempt + 1))
+        # Fallback to direct write if atomic replace is denied on Windows
+        with open(checkpoint_file, "w", encoding="utf-8") as f:
+            json.dump(checkpoint_data, f, ensure_ascii=False, indent=2)
+    except Exception:
+        pass
+    finally:
+        if temp_file.exists():
+            try:
+                temp_file.unlink()
+            except Exception:
+                pass
 
 
 def generate_pll_summary_markdown(
@@ -433,9 +450,11 @@ def run_pll_scoring_experiment(
 
     expected_evaluations = len(target_rows) * len(target_models)
 
-    # Device configuration: default to CPU for 8 GB RAM stability
+    # Device configuration: use CUDA if available, or respect device_override
     if device_override:
         device = torch.device(device_override)
+    elif torch.cuda.is_available():
+        device = torch.device("cuda")
     else:
         device = torch.device("cpu")
 
@@ -524,8 +543,8 @@ def run_pll_scoring_experiment(
             )
             results_map[key] = rec
 
-            # Incremental checkpoint save every 5 rows or on final row
-            if idx % 5 == 0 or idx == len(needed_rows):
+            # Incremental checkpoint save every 50 rows or on final row
+            if idx % 50 == 0 or idx == len(needed_rows):
                 save_checkpoint(checkpoint_file, results_map)
 
         # Unload model and free RAM before moving to the next model

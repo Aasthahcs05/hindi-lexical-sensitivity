@@ -1,0 +1,41 @@
+{
+  "total": 2000,
+  "accept": 1676,
+  "review": 309,
+  "reject": 15,
+  "categories": [
+    {
+      "track": "VALID_WORD_CONTEXT",
+      "total_pairs": 322,
+      "pct_of_dataset": 16.1,
+      "accept_count": 309,
+      "accept_pct": 95.96,
+      "review_count": 8,
+      "review_pct": 2.48,
+      "reject_count": 5,
+      "reject_pct": 1.55
+    },
+    {
+      "track": "SYNONYM_SUBSTITUTION",
+      "total_pairs": 398,
+      "pct_of_dataset": 19.9,
+      "accept_count": 362,
+      "accept_pct": 90.95,
+      "review_count": 34,
+      "review_pct": 8.54,
+      "reject_count": 2,
+      "reject_pct": 0.5
+    },
+    {
+      "track": "REALISTIC_SPELLING_ERROR",
+      "total_pairs": 1280,
+      "pct_of_dataset": 64.0,
+      "accept_count": 1005,
+      "accept_pct": 78.52,
+      "review_count": 267,
+      "review_pct": 20.86,
+      "reject_count": 8,
+      "reject_pct": 0.62
+    }
+  ]
+}

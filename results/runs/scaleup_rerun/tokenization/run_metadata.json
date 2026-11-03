@@ -1,0 +1,46 @@
+{
+  "run_timestamp_utc": "2026-11-02T16:53:59.786538+00:00",
+  "completed_successfully": true,
+  "input_file": {
+    "path": "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\data\\final\\PRIMARY_BENCHMARK_ADJUDICATED.csv",
+    "sha256": "b769ccd82ee00b7930c8f32a7666e5d16897d0afc8c10c1cc97633334717fe18",
+    "non_empty_rows": 1679
+  },
+  "experiment_config": {
+    "models": [
+      "FacebookAI/xlm-roberta-base",
+      "google/muril-base-cased"
+    ],
+    "output_dir": "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\results\\runs\\scaleup_rerun\\tokenization"
+  },
+  "model_details": {
+    "FacebookAI/xlm-roberta-base": {
+      "tokenizer_class": "XLMRobertaTokenizer",
+      "is_fast": true,
+      "vocab_size": 250002,
+      "name_or_path": "FacebookAI/xlm-roberta-base"
+    },
+    "google/muril-base-cased": {
+      "tokenizer_class": "BertTokenizer",
+      "is_fast": true,
+      "vocab_size": 197258,
+      "name_or_path": "google/muril-base-cased"
+    }
+  },
+  "library_versions": {
+    "python": "3.13.5",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "transformers": "5.19.0",
+    "tokenizers": "0.23.3",
+    "sentencepiece": "not_installed",
+    "openpyxl": "not_installed"
+  },
+  "output_files": {
+    "csv_path": "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\results\\runs\\scaleup_rerun\\tokenization\\tokenization_results.csv",
+    "csv_row_count": 3358,
+    "csv_sha256": "32a068fd193d1857daff32c36e013702170d0460cda64a2924e1c9f30498b000",
+    "metadata_path": "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\results\\runs\\scaleup_rerun\\tokenization\\run_metadata.json",
+    "summary_path": "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\results\\runs\\scaleup_rerun\\tokenization\\summary.md"
+  },
+  "warnings_or_errors": []
+}

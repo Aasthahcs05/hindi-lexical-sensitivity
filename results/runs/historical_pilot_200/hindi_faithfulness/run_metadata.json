@@ -1,0 +1,41 @@
+{
+  "run_timestamp_utc": "2026-10-19T16:01:28.394138+00:00",
+  "input_dataset": "data\\raw\\hindi_lexical_sensitivity_cleaned.xlsx",
+  "input_sha256": "f9a5af81e21624de47ead7feabba412149939c1eb9934f8fc2b8d452a232cd44",
+  "models_evaluated": [
+    "google/muril-base-cased",
+    "FacebookAI/xlm-roberta-base"
+  ],
+  "track_filter": "REALISTIC_SPELLING_ERROR",
+  "target_definition": "visible_target_mean_subword_logit",
+  "explanation_methods": [
+    "attention",
+    "integrated_gradients"
+  ],
+  "masking_fractions": [
+    0.1,
+    0.2,
+    0.3
+  ],
+  "rounding_policy": "k = max(1, round(fraction * n_context))",
+  "ig_n_steps": 20,
+  "total_source_pairs_evaluated": 20,
+  "total_intervention_records": 1440,
+  "output_files": [
+    "outputs\\hindi_faithfulness\\faithfulness_pair_level.csv",
+    "outputs\\hindi_faithfulness\\faithfulness_summary.csv",
+    "outputs\\hindi_faithfulness\\eligibility_report.csv",
+    "outputs\\hindi_faithfulness\\stability_faithfulness_relationship.csv",
+    "outputs\\hindi_faithfulness\\run_metadata.json",
+    "outputs\\hindi_faithfulness\\stage7_report.md"
+  ],
+  "library_versions": {
+    "python": "3.12.10",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "transformers": "4.57.6",
+    "tokenizers": "0.22.2",
+    "sentencepiece": "0.2.2",
+    "openpyxl": "3.1.5"
+  },
+  "completed_successfully": true
+}

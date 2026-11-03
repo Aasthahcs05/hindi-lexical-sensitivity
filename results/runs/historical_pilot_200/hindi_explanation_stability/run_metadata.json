@@ -1,0 +1,35 @@
+{
+  "run_timestamp_utc": "2026-10-19T15:33:56.448712+00:00",
+  "input_dataset": "data\\raw\\hindi_lexical_sensitivity_cleaned.xlsx",
+  "input_sha256": "f9a5af81e21624de47ead7feabba412149939c1eb9934f8fc2b8d452a232cd44",
+  "models_evaluated": [
+    "google/muril-base-cased",
+    "FacebookAI/xlm-roberta-base"
+  ],
+  "track_filter": "REALISTIC_SPELLING_ERROR",
+  "target_definition": "scalar_mlm_canonical_target_token_logit_at_masked_position",
+  "explanation_methods": [
+    "attention",
+    "integrated_gradients"
+  ],
+  "ig_n_steps": 20,
+  "ig_baseline": "pad_with_target_masked",
+  "total_source_pairs_evaluated": 20,
+  "total_pair_evaluations": 80,
+  "output_files": [
+    "outputs\\hindi_explanation_stability\\stability_pair_level.csv",
+    "outputs\\hindi_explanation_stability\\stability_summary.csv",
+    "outputs\\hindi_explanation_stability\\eligibility_report.csv",
+    "outputs\\hindi_explanation_stability\\run_metadata.json",
+    "outputs\\hindi_explanation_stability\\stage6_report.md"
+  ],
+  "library_versions": {
+    "python": "3.12.10",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "transformers": "4.57.6",
+    "tokenizers": "0.22.2",
+    "sentencepiece": "0.2.2",
+    "openpyxl": "3.1.5"
+  },
+  "completed_successfully": true
+}

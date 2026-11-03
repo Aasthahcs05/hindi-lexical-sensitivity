@@ -6,41 +6,60 @@ This document specifies the exact software dependencies, hardware environment, r
 
 ## 1. Computing Environment & Dependency Versions
 
-All experiments were executed on CPU hardware with explicit memory cleanup and batching to guarantee reproducibility on commodity workstations without requiring specialized GPU accelerators.
+All scale-up experiments were executed on an NVIDIA GPU workstation with CUDA acceleration and batching:
 
 - **Operating System**: Windows 11 Enterprise / Pro (x86_64)
-- **Host Memory**: 8 GB RAM (optimized with per-batch garbage collection)
-- **Python Version**: Python 3.12.x
+- **GPU Accelerator**: NVIDIA GeForce RTX 3050 6GB Laptop GPU
+- **CUDA Version**: 12.6
+- **Host Memory**: 8 GB RAM
+- **Python Version**: Python 3.12+ / 3.13
 - **Key Python Packages**:
-  - `torch == 2.14.1+cpu`
+  - `torch == 2.14.1+cu126`
   - `transformers == 4.57.6`
   - `tokenizers == 0.22.2`
   - `captum == 0.9.0`
-  - `scipy == 1.18.1`
-  - `numpy == 2.5.4`
-  - `pandas == 3.0.6`
+  - `scipy == 1.16.0 / 1.18.1`
+  - `numpy >= 1.26.0`
+  - `pandas >= 2.2.0`
   - `openpyxl == 3.1.5`
   - `matplotlib == 3.11.2`
   - `python-docx == 1.2.0`
-  - `reportlab == 5.0.1`
+  - `reportlab == 5.1.0`
 
 ---
 
 ## 2. Dataset Specifications & Integrity Verification
 
-- **Primary Source File**: `data/raw/hindi_lexical_sensitivity_cleaned.xlsx`
-- **Verified SHA-256 Checksum**: `f9a5af81e21624de47ead7feabba412149939c1eb9934f8fc2b8d452a232cd44`
-- **Total Populated Rows**: Exactly 200 non-empty sentence pairs (`HC_0001` to `HC_0200`).
-- **Bounding Spreadsheet Dimension**: `A1:R201` (1 header row + 200 data rows).
-- **Unicode Script Range**: 100% Devanagari characters conform to Unicode block `U+0900`–`U+097F`.
-- **Track Distribution**:
-  - `VALID_WORD_CONTEXT`: 142 pairs (71.0%)
-  - `SYNONYM_SUBSTITUTION`: 38 pairs (19.0%)
-  - `REALISTIC_SPELLING_ERROR`: 20 pairs (10.0%)
-- **Data Quality & Forensic Adjudication**:
-  - Exactly **1 pair rejected**: `HC_0178` (`final_status = reject`).
-  - Exactly **6 disagreement overrides**: `HC_0087`, `HC_0099`, `HC_0138`, `HC_0172`, `HC_0180`, `HC_0186` (retained as valid Hindi sentence contrasts with `final_status = accept`).
-  - Accepted evaluation benchmark: 199 accepted pairs (200 pairs including the audited rejected baseline).
+The experimental pipeline utilizes four distinct frozen datasets derived from an audited reconciliation of 2,000 raw candidate rows:
+
+1. **Primary Benchmark (`data/final/PRIMARY_BENCHMARK_ADJUDICATED.csv`)**:
+   - **Row Count**: Exactly 1,679 minimal sentence pairs ($3,358$ individual evaluations).
+   - **Track Breakdown**:
+     - `VALID_WORD_CONTEXT`: 312 pairs (18.58%)
+     - `SYNONYM_SUBSTITUTION`: 362 pairs (21.56%)
+     - `REALISTIC_SPELLING_ERROR`: 1,005 pairs (59.86%)
+   - **Quality**: Triple-annotated and adjudicated gold standard. 100% Devanagari script integrity.
+
+2. **Template Sensitivity Benchmark (`data/final/TEMPLATE_SENSITIVITY_BENCHMARK.csv`)**:
+   - **Row Count**: Exactly 1,957 minimal sentence pairs ($3,914$ evaluations).
+   - **Track Breakdown**:
+     - `VALID_WORD_CONTEXT`: 312 pairs
+     - `SYNONYM_SUBSTITUTION`: 385 pairs
+     - `REALISTIC_SPELLING_ERROR`: 1,260 pairs
+   - **Purpose**: Evaluates frame-level syntactic sensitivity across 278 template frames.
+
+3. **Auxiliary Multiword Probe (`data/final/AUXILIARY_MULTIWORD_PROBE.csv`)**:
+   - **Row Count**: Exactly 12 minimal sentence pairs ($24$ evaluations).
+   - **Linguistic Taxonomy**:
+     - 6 gender/number agreement changes
+     - 1 postpositional insertion
+     - 1 collocational light-verb change
+     - 4 repeated-target ambiguities
+   - **Purpose**: Evaluates multiword ripple effects and token alignment edge cases.
+
+4. **Historical Pilot Cohort (`results/runs/historical_pilot_200/`)**:
+   - **Row Count**: Exactly 200 minimal sentence pairs ($400$ evaluations).
+   - **Purpose**: Retained intact for archival provenance and historical pilot comparisons.
 
 ---
 
@@ -59,6 +78,7 @@ All experiments were executed on CPU hardware with explicit memory cleanup and b
 | **Mask Token** | `<mask>` (ID: 250001) | `[MASK]` (ID: 103) |
 | **Pad Token** | `<pad>` (ID: 1) | `[PAD]` (ID: 0) |
 | **BOS / EOS Tokens** | `<s>` / `</s>` | `[CLS]` / `[SEP]` |
+| **Attention Implementation** | `attn_implementation="eager"` | `attn_implementation="eager"` |
 
 ---
 
@@ -115,6 +135,7 @@ Context tokens are ranked by importance:
 - **Bottom-$k$ Erasure (Control)**: Mask the bottom $k$ tokens.
 - **Random-$k$ Erasure**: Mask $k$ tokens selected uniformly at random (averaged over 5 runs).
 - **Fractions Evaluated**: $f \in \{0.10, 0.20, 0.30\}$.
+- **Evaluated Cohort**: All $N=2,010$ sentences ($1,005$ original $+ 1,005$ contrast) across the primary spelling track.
 
 ### Metrics
 1. **Target Logit Drop**:
@@ -136,26 +157,14 @@ Context tokens are ranked by importance:
 
 ---
 
-## 8. Reproduction Pipeline Commands
+## 8. Authoritative Run Directory
 
-To execute the entire analysis pipeline from the root directory:
+All verified results, CSVs, figures, and manifests for the expanded experiments are located in:
+`results/runs/scaleup_rerun/`
 
+Document and artifact generation:
 ```bash
-# 1. Dataset validation and audit
-python -m src.data.validate_dataset
-
-# 2. Subword tokenization extraction
-python -m src.tokenization.analyze_tokenization
-
-# 3. Pseudo-log-likelihood scoring
-python -m src.scoring.compute_pll
-
-# 4. Combined statistical analysis and Figures 1-5
-python -m src.analysis.combined_analysis
-
-# 5. Visible-target stability and faithfulness evaluation
-python -m src.explainability.evaluate_faithfulness
-
-# 6. Generate Figures 6, 7, and 8
-python -m src.analysis.generate_paper_figures
+python scripts/build_paper_documents.py
+python scripts/build_excel_workbook.py
 ```
+generates `paper/research_paper.docx`, `paper/research_paper.pdf`, and `paper/expanded_experimental_results.xlsx`, mirroring them to `research_paper/`.

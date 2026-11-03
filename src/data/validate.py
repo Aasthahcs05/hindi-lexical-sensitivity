@@ -10,6 +10,7 @@ and runs Devanagari script diagnostics without altering or cleaning the data.
 from __future__ import annotations
 
 import argparse
+import csv
 from collections import Counter, defaultdict
 import json
 from pathlib import Path
@@ -176,13 +177,17 @@ def _read_excel_stdlib(file_path: Path) -> list[list[Any]]:
 
 
 def load_raw_rows(file_path: str | Path) -> list[list[Any]]:
-    """Load rows from an Excel file without modifying it.
+    """Load rows from an Excel or CSV file without modifying it.
 
-    Uses openpyxl when installed, otherwise falls back to standard library.
+    Supports .csv directly via csv.reader, and .xlsx via openpyxl/stdlib.
     """
     path = Path(file_path)
     if not path.is_file():
         raise FileNotFoundError(f"Dataset file not found: {path}")
+
+    if path.suffix.lower() == ".csv":
+        with open(path, "r", encoding="utf-8", errors="replace") as f:
+            return list(csv.reader(f))
 
     if HAS_OPENPYXL:
         return _read_excel_openpyxl(path)

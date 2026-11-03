@@ -24,9 +24,14 @@ from src.data.tokenization_experiment import (
     load_dataset_rows,
 )
 
-DEFAULT_INPUT_DATASET = Path("data/raw/hindi_lexical_sensitivity_cleaned.xlsx")
-OUTPUT_BASE = Path("outputs")
-DASHBOARD_DIR = Path("outputs/dashboard_data")
+# Anchor all paths to the project root regardless of the caller's cwd.
+# This ensures the module works from Jupyter (cwd=notebooks/) as well as
+# when invoked directly from the project root.
+_PROJECT_ROOT = Path(__file__).resolve().parents[2]  # src/analysis/dashboard_data.py -> project root
+
+DEFAULT_INPUT_DATASET = _PROJECT_ROOT / "data" / "raw" / "hindi_lexical_sensitivity_cleaned.xlsx"
+OUTPUT_BASE = _PROJECT_ROOT / "outputs"
+DASHBOARD_DIR = _PROJECT_ROOT / "outputs" / "dashboard_data"
 
 EXPECTED_DATASET_SHA256 = "f9a5af81e21624de47ead7feabba412149939c1eb9934f8fc2b8d452a232cd44"
 
@@ -578,54 +583,73 @@ def generate_scientific_audit_markdown(
     return "\n".join(lines)
 
 
-def run_stage8_dashboard_data_preparation() -> dict[str, Any]:
+def run_stage8_dashboard_data_preparation(
+    input_dataset: Path | str = DEFAULT_INPUT_DATASET,
+    output_base: Path | str = OUTPUT_BASE,
+    dashboard_dir: Path | str = DASHBOARD_DIR,
+) -> dict[str, Any]:
     """Execute Stage 8 data preparation and output verification."""
-    DASHBOARD_DIR.mkdir(parents=True, exist_ok=True)
+    in_dataset = Path(input_dataset)
+    out_base = Path(output_base)
+    dash_dir = Path(dashboard_dir)
+    dash_dir.mkdir(parents=True, exist_ok=True)
 
-    dataset_sha = compute_file_sha256(DEFAULT_INPUT_DATASET)
-    dataset_rows = load_dataset_rows(DEFAULT_INPUT_DATASET)
+    dataset_sha = compute_file_sha256(in_dataset)
+    dataset_rows = load_dataset_rows(in_dataset)
+
+    # Resolve stability & faithfulness dirs
+    stab_dir = out_base / "stability"
+    if not stab_dir.exists():
+        stab_dir = out_base / "hindi_explanation_stability"
+
+    faith_dir = out_base / "faithfulness"
+    if not faith_dir.exists():
+        faith_dir = out_base / "hindi_faithfulness"
 
     # Load source outputs
-    s2_rows = load_csv_rows(OUTPUT_BASE / "tokenization" / "tokenization_results.csv")
-    s3_rows = load_csv_rows(OUTPUT_BASE / "scoring" / "pll_scoring_results.csv")
-    s6_summary_rows = load_csv_rows(OUTPUT_BASE / "hindi_explanation_stability" / "stability_summary.csv")
-    s6_pair_rows = load_csv_rows(OUTPUT_BASE / "hindi_explanation_stability" / "stability_pair_level.csv")
-    s6_elig_rows = load_csv_rows(OUTPUT_BASE / "hindi_explanation_stability" / "eligibility_report.csv")
-    s7_pair_rows = load_csv_rows(OUTPUT_BASE / "hindi_faithfulness" / "faithfulness_pair_level.csv")
-    s7_summary_rows = load_csv_rows(OUTPUT_BASE / "hindi_faithfulness" / "faithfulness_summary.csv")
-    s7_elig_rows = load_csv_rows(OUTPUT_BASE / "hindi_faithfulness" / "eligibility_report.csv")
-    s7_rel_rows = load_csv_rows(OUTPUT_BASE / "hindi_faithfulness" / "stability_faithfulness_relationship.csv")
+    s2_rows = load_csv_rows(out_base / "tokenization" / "tokenization_results.csv")
+    s3_rows = load_csv_rows(out_base / "scoring" / "pll_scoring_results.csv")
+    s6_summary_rows = load_csv_rows(stab_dir / "stability_summary.csv")
+    s6_pair_rows = load_csv_rows(stab_dir / "stability_pair_level.csv")
+    s6_elig_rows = load_csv_rows(stab_dir / "eligibility_report.csv")
+    s7_pair_rows = load_csv_rows(faith_dir / "faithfulness_pair_level.csv")
+    s7_summary_rows = load_csv_rows(faith_dir / "faithfulness_summary.csv")
+    s7_elig_rows = load_csv_rows(faith_dir / "faithfulness_summary.csv" if not (faith_dir / "faithfulness_summary.csv").exists() else faith_dir / "faithfulness_summary.csv")
+    # Note: s7_summary_rows
+    s7_summary_rows = load_csv_rows(faith_dir / "faithfulness_summary.csv")
+    s7_elig_rows = load_csv_rows(faith_dir / "eligibility_report.csv")
+    s7_rel_rows = load_csv_rows(faith_dir / "stability_faithfulness_relationship.csv")
 
     # 1. Dataset overview
     overview_dict, track_rows = build_dataset_overview(dataset_rows, dataset_sha)
-    export_json(overview_dict, DASHBOARD_DIR / "dataset_overview.json")
-    export_csv(track_rows, DASHBOARD_DIR / "dataset_tracks.csv")
+    export_json(overview_dict, dash_dir / "dataset_overview.json")
+    export_csv(track_rows, dash_dir / "dataset_tracks.csv")
 
     # 2. Tokenization summary
     tok_summary = build_tokenization_summary(s2_rows)
-    export_csv(tok_summary, DASHBOARD_DIR / "tokenization_summary.csv")
+    export_csv(tok_summary, dash_dir / "tokenization_summary.csv")
 
     # 3. Scoring summary
     score_summary = build_scoring_summary(s3_rows)
-    export_csv(score_summary, DASHBOARD_DIR / "scoring_summary.csv")
+    export_csv(score_summary, dash_dir / "scoring_summary.csv")
 
     # 4. Stability summary
     stab_summary = build_stability_summary(s6_summary_rows, s7_rel_rows)
-    export_csv(stab_summary, DASHBOARD_DIR / "stability_summary.csv")
+    export_csv(stab_summary, dash_dir / "stability_summary.csv")
 
     # 5. Faithfulness summary
-    export_csv(s7_summary_rows, DASHBOARD_DIR / "faithfulness_summary.csv")
+    export_csv(s7_summary_rows, dash_dir / "faithfulness_summary.csv")
 
     # 6. Master pair-level comparison
     pair_master = build_pair_level_master(s2_rows, s3_rows, s6_pair_rows, s7_rel_rows, s7_pair_rows)
-    export_csv(pair_master, DASHBOARD_DIR / "pair_level_master.csv")
+    export_csv(pair_master, dash_dir / "pair_level_master.csv")
 
     # 7. Unified eligibility
     elig_master = build_eligibility_master(dataset_rows, s6_elig_rows, s7_elig_rows)
-    export_csv(elig_master, DASHBOARD_DIR / "eligibility_master.csv")
+    export_csv(elig_master, dash_dir / "eligibility_master.csv")
 
     # 8. Stability-faithfulness relationship table
-    export_csv(s7_rel_rows, DASHBOARD_DIR / "stability_faithfulness_relationship.csv")
+    export_csv(s7_rel_rows, dash_dir / "stability_faithfulness_relationship.csv")
 
     # 9. Scientific audit report
     correlations = compute_stability_faithfulness_correlations(s7_rel_rows)
@@ -638,7 +662,7 @@ def run_stage8_dashboard_data_preparation() -> dict[str, Any]:
         faithfulness_summary=s7_summary_rows,
         correlations=correlations,
     )
-    with open(DASHBOARD_DIR / "scientific_audit_report.md", "w", encoding="utf-8") as f:
+    with open(dash_dir / "scientific_audit_report.md", "w", encoding="utf-8") as f:
         f.write(audit_report)
 
     # Manifest metadata
@@ -646,22 +670,22 @@ def run_stage8_dashboard_data_preparation() -> dict[str, Any]:
         "dataset_sha256": dataset_sha,
         "total_source_pairs": len(dataset_rows),
         "dashboard_files_generated": [
-            "outputs/dashboard_data/dataset_overview.json",
-            "outputs/dashboard_data/dataset_tracks.csv",
-            "outputs/dashboard_data/tokenization_summary.csv",
-            "outputs/dashboard_data/scoring_summary.csv",
-            "outputs/dashboard_data/stability_summary.csv",
-            "outputs/dashboard_data/faithfulness_summary.csv",
-            "outputs/dashboard_data/pair_level_master.csv",
-            "outputs/dashboard_data/eligibility_master.csv",
-            "outputs/dashboard_data/stability_faithfulness_relationship.csv",
-            "outputs/dashboard_data/scientific_audit_report.md",
+            str((dash_dir / "dataset_overview.json").resolve()),
+            str((dash_dir / "dataset_tracks.csv").resolve()),
+            str((dash_dir / "tokenization_summary.csv").resolve()),
+            str((dash_dir / "scoring_summary.csv").resolve()),
+            str((dash_dir / "stability_summary.csv").resolve()),
+            str((dash_dir / "faithfulness_summary.csv").resolve()),
+            str((dash_dir / "pair_level_master.csv").resolve()),
+            str((dash_dir / "eligibility_master.csv").resolve()),
+            str((dash_dir / "stability_faithfulness_relationship.csv").resolve()),
+            str((dash_dir / "scientific_audit_report.md").resolve()),
         ],
         "pair_master_row_count": len(pair_master),
         "eligibility_master_row_count": len(elig_master),
         "audit_completed_successfully": True,
     }
-    export_json(manifest, DASHBOARD_DIR / "manifest.json")
+    export_json(manifest, dash_dir / "manifest.json")
 
     return manifest
 

@@ -800,7 +800,7 @@ def run_stage6_stability_experiment(
     if models is None:
         models = DEFAULT_MODELS
     if device is None:
-        device = torch.device("cpu")
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     out_path = Path(output_dir)
     out_path.mkdir(parents=True, exist_ok=True)

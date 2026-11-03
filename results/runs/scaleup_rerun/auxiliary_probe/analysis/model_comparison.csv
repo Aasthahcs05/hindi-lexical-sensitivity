@@ -1,0 +1,5 @@
+track_scope,n_pairs,direction_both_negative,direction_both_positive,direction_xlm_neg_muril_pos,direction_xlm_pos_muril_neg,direction_agreement_rate,spearman_r_delta_meanlp,p_value,ci_95_lo,ci_95_hi,note
+ALL_TRACKS,12,4,1,1,6,0.4167,0.6364,0.026097,0.0984,0.8865,Within-model Δ MeanLogP compared. Raw PLL sums NOT cross-compared.
+VALID_WORD_CONTEXT,3,3,0,0,0,1.0000,-1.0000,0.000000,nan,nan,Within-model Δ MeanLogP compared. Raw PLL sums NOT cross-compared.
+SYNONYM_SUBSTITUTION,8,0,1,1,6,0.1250,-0.1429,0.735765,-0.7700,0.6247,Within-model Δ MeanLogP compared. Raw PLL sums NOT cross-compared.
+REALISTIC_SPELLING_ERROR,1,1,0,0,0,1.0000,nan,nan,nan,nan,Within-model Δ MeanLogP compared. Raw PLL sums NOT cross-compared.

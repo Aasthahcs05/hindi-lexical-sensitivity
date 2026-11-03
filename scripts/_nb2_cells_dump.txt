@@ -1,0 +1,149 @@
+=== CODE CELL 1 ===
+import sys
+from pathlib import Path
+import json
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from transformers import AutoTokenizer
+
+ROOT_DIR = Path.cwd().parent if Path.cwd().name == "notebooks" else Path.cwd()
+if str(ROOT_DIR) not in sys.path:
+    sys.path.insert(0, str(ROOT_DIR))
+
+from src.data.tokenization_experiment import (
+    align_target_word,
+    tokenize_sentence,
+    process_sentence_pair,
+    compute_file_sha256,
+)
+
+print("Tokenizer evaluation module loaded.")
+
+=== CODE CELL 3 ===
+print("Loading XLM-RoBERTa tokenizer...")
+tok_xlm = AutoTokenizer.from_pretrained("FacebookAI/xlm-roberta-base", use_fast=True)
+
+print("Loading MuRIL tokenizer...")
+tok_muril = AutoTokenizer.from_pretrained("google/muril-base-cased", use_fast=True)
+
+print("\nTokenizers loaded successfully!")
+print(f"XLM-RoBERTa Vocab Size: {tok_xlm.vocab_size:,}")
+print(f"MuRIL Vocab Size:       {tok_muril.vocab_size:,}")
+
+=== CODE CELL 5 ===
+sample_sent = "राम और सीता साथ हैं।"
+
+# XLM-RoBERTa tokenization
+xlm_res = tokenize_sentence(sample_sent, tok_xlm)
+print("=== XLM-RoBERTa Tokenization ===")
+print(f"Tokens (Inclusive): {xlm_res['tokens']}")
+print(f"Input IDs:          {xlm_res['input_ids']}")
+print(f"Special Tokens:     {xlm_res['count_inclusive'] - xlm_res['count_exclusive']}")
+print(f"Exclusive Count:    {xlm_res['count_exclusive']}")
+
+# MuRIL tokenization
+muril_res = tokenize_sentence(sample_sent, tok_muril)
+print("\n=== MuRIL Tokenization ===")
+print(f"Tokens (Inclusive): {muril_res['tokens']}")
+print(f"Input IDs:          {muril_res['input_ids']}")
+print(f"Special Tokens:     {muril_res['count_inclusive'] - muril_res['count_exclusive']}")
+print(f"Exclusive Count:    {muril_res['count_exclusive']}")
+
+=== CODE CELL 7 ===
+# Test alignment on sample sentence
+target_word = "सीता"
+alignment = align_target_word(sample_sent, target_word, xlm_res["encoding"], tok_xlm)
+
+print(f"Sentence:         '{sample_sent}'")
+print(f"Target word:      '{target_word}'")
+print(f"Alignment Status: {alignment['status']}")
+print(f"Character Span:   {alignment['char_span']}")
+print(f"Subword Tokens:   {alignment['tokens']}")
+print(f"Subword Token IDs:{alignment['token_ids']}")
+print(f"Token Count:      {alignment['token_count']}")
+
+=== CODE CELL 9 ===
+TOK_RESULTS_PATH = ROOT_DIR / "outputs" / "tokenization" / "tokenization_results.csv"
+df_tok = pd.read_csv(TOK_RESULTS_PATH)
+
+print(f"Total evaluation rows: {len(df_tok)}")
+print(f"Models evaluated:      {df_tok['model_name'].unique().tolist()}")
+print(f"Pairs evaluated:       {df_tok['pair_id'].nunique()}")
+print(f"Tracks covered:        {df_tok['track'].unique().tolist()}")
+
+=== CODE CELL 10 ===
+# Target Word Alignment Coverage Check
+align_coverage = df_tok.groupby(["model_name", "target_orig_alignment_status"]).size().unstack(fill_value=0)
+print("Original Target Alignment Status Coverage:")
+print(align_coverage)
+
+align_cont_coverage = df_tok.groupby(["model_name", "target_cont_alignment_status"]).size().unstack(fill_value=0)
+print("\nContrast Target Alignment Status Coverage:")
+print(align_cont_coverage)
+
+=== CODE CELL 13 ===
+# Filter spelling error pairs
+spelling_pairs = df_tok[df_tok["track"] == "REALISTIC_SPELLING_ERROR"].copy()
+
+# Calculate single-subword coverage
+collapse_stats = []
+for model in spelling_pairs["model_name"].unique():
+    m_df = spelling_pairs[spelling_pairs["model_name"] == model]
+    n_pairs = len(m_df)
+    
+    orig_single = (m_df["target_orig_token_count"] == 1).sum()
+    cont_single = (m_df["target_cont_token_count"] == 1).sum()
+    
+    collapse_stats.append({
+        "Model": model.split("/")[-1],
+        "Total Pairs": n_pairs,
+        "Original Canonical Single-Subword": f"{orig_single}/{n_pairs} ({orig_single/n_pairs*100:.1f}%)",
+        "Misspelled Contrast Single-Subword": f"{cont_single}/{n_pairs} ({cont_single/n_pairs*100:.1f}%)",
+        "Absolute Coverage Collapse": f"{(cont_single - orig_single)/n_pairs*100:.1f}%",
+    })
+
+pd.DataFrame(collapse_stats)
+
+=== CODE CELL 16 ===
+summary_table = df_tok.groupby(["model_name", "track"]).agg(
+    Pairs=("pair_id", "count"),
+    Mean_Delta_Sentence=("delta_token_count_exclusive", "mean"),
+    SD_Delta_Sentence=("delta_token_count_exclusive", "std"),
+    Mean_Delta_Target=("delta_target_token_count", "mean"),
+    SD_Delta_Target=("delta_target_token_count", "std"),
+).reset_index()
+
+summary_table["Model"] = summary_table["model_name"].apply(lambda x: x.split("/")[-1])
+summary_table[["Model", "track", "Pairs", "Mean_Delta_Sentence", "Mean_Delta_Target"]]
+
+=== CODE CELL 17 ===
+fig, axes = plt.subplots(1, 2, figsize=(14, 5), sharey=True)
+
+models = df_tok["model_name"].unique()
+tracks = ["VALID_WORD_CONTEXT", "SYNONYM_SUBSTITUTION", "REALISTIC_SPELLING_ERROR"]
+colors = ["#2b5c8f", "#d95f02", "#7570b3"]
+
+for idx, model in enumerate(models):
+    ax = axes[idx]
+    m_name = model.split("/")[-1]
+    m_df = df_tok[df_tok["model_name"] == model]
+    
+    means = [m_df[m_df["track"] == t]["delta_token_count_exclusive"].mean() for t in tracks]
+    stds = [m_df[m_df["track"] == t]["delta_token_count_exclusive"].std() for t in tracks]
+    
+    bars = ax.bar(tracks, means, yerr=stds, capsize=5, color=colors, alpha=0.85, edgecolor="black")
+    ax.axhline(0, color="gray", linestyle="--", linewidth=1)
+    ax.set_title(f"{m_name} — Sentence Token Delta (Δ)", fontsize=12, fontweight="bold")
+    ax.set_ylabel("Mean Δ Tokens (Contrast - Original)", fontsize=11)
+    ax.tick_params(axis="x", rotation=15)
+    
+    for bar, mean in zip(bars, means):
+        height = bar.get_height()
+        va = "bottom" if height >= 0 else "top"
+        ax.text(bar.get_x() + bar.get_width()/2., height + 0.05, f"{mean:+.2f}",
+                ha="center", va=va, fontweight="bold")
+
+plt.tight_layout()
+plt.show()
+

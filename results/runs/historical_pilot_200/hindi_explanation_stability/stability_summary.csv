@@ -1,0 +1,5 @@
+model_name,method,track,total_pairs_in_track,evaluated_pairs,eligible_pairs,ineligible_pairs,valid_metric_pairs,spearman_mean,spearman_median,spearman_iqr,top_k_overlap_mean,top_k_overlap_median,cosine_sim_mean,cosine_sim_median,cosine_sim_signed_mean
+FacebookAI/xlm-roberta-base,attention,REALISTIC_SPELLING_ERROR,20,20,4,16,4,1.0,1.0,0.0,1.0,1.0,1.0,1.0,
+FacebookAI/xlm-roberta-base,integrated_gradients,REALISTIC_SPELLING_ERROR,20,20,4,16,4,1.0,1.0,0.0,1.0,1.0,1.0,1.0,1.0
+google/muril-base-cased,attention,REALISTIC_SPELLING_ERROR,20,20,6,14,6,1.0,1.0,0.0,1.0,1.0,1.0,1.0,
+google/muril-base-cased,integrated_gradients,REALISTIC_SPELLING_ERROR,20,20,6,14,6,1.0,1.0,0.0,1.0,1.0,1.0,1.0,1.0

@@ -1,0 +1,159 @@
+{
+  "file_name": "hindi_lexical_sensitivity_cleaned.xlsx",
+  "file_path": "D:\\hindi-lexical-sensitivity\\data\\raw\\hindi_lexical_sensitivity_cleaned.xlsx",
+  "is_valid": true,
+  "schema": {
+    "expected_column_count": 18,
+    "actual_column_count": 18,
+    "columns_present": [
+      "pair_id",
+      "track",
+      "original_sentence",
+      "contrast_sentence",
+      "target_original",
+      "target_contrast",
+      "intended_meaning_hi",
+      "intended_meaning_en",
+      "grammatical_original",
+      "grammatical_contrast",
+      "contrast_label",
+      "notes",
+      "annotator_1",
+      "annotator_2",
+      "adjudication",
+      "final_status",
+      "source_type",
+      "source_reference"
+    ],
+    "missing_columns": [],
+    "unexpected_columns": [],
+    "column_order_matches": true
+  },
+  "row_counts": {
+    "total_raw_rows_in_sheet": 201,
+    "total_data_rows": 200,
+    "non_empty_data_rows": 200,
+    "empty_trailing_rows": 0
+  },
+  "track_distribution": {
+    "VALID_WORD_CONTEXT": 142,
+    "SYNONYM_SUBSTITUTION": 38,
+    "REALISTIC_SPELLING_ERROR": 20
+  },
+  "final_status_distribution": {
+    "accept": 199,
+    "reject": 1
+  },
+  "integrity_checks": {
+    "duplicate_pair_ids": {},
+    "missing_required_fields_count": 0,
+    "missing_required_by_row": [],
+    "empty_sentences_count": 0,
+    "empty_sentences": [],
+    "identical_pairs_count": 0,
+    "identical_pairs": [],
+    "unknown_tracks_count": 0,
+    "unknown_tracks": []
+  },
+  "human_review_disagreements": {
+    "total_disagreements_count": 6,
+    "disagreements": [
+      {
+        "excel_row": 88,
+        "pair_id": "HC_0087",
+        "annotator_1": "reject",
+        "annotator_2": "reject",
+        "adjudication": "reject",
+        "final_status": "accept",
+        "reasons": [
+          "adjudication != final_status",
+          "annotator_1 != final_status",
+          "annotator_2 != final_status"
+        ],
+        "notes": "पूरा शब्द बदला; दोनों वाक्य व्याकरणिक हैं"
+      },
+      {
+        "excel_row": 100,
+        "pair_id": "HC_0099",
+        "annotator_1": "reject",
+        "annotator_2": "reject",
+        "adjudication": "reject",
+        "final_status": "accept",
+        "reasons": [
+          "adjudication != final_status",
+          "annotator_1 != final_status",
+          "annotator_2 != final_status"
+        ],
+        "notes": "दोनों वाक्य व्याकरणिक रूप से सही हैं, लेकिन विपरीत अर्थ वाले पूरे शब्द बदले"
+      },
+      {
+        "excel_row": 139,
+        "pair_id": "HC_0138",
+        "annotator_1": "reject",
+        "annotator_2": "reject",
+        "adjudication": "reject",
+        "final_status": "accept",
+        "reasons": [
+          "adjudication != final_status",
+          "annotator_1 != final_status",
+          "annotator_2 != final_status"
+        ],
+        "notes": "दोनों शब्द ‘पकड़ा’ और ‘रगड़ा’ मान्य हिंदी शब्द हैं और संदर्भ के अनुसार दोनों का प्रयोग सही हो सकता है।"
+      },
+      {
+        "excel_row": 173,
+        "pair_id": "HC_0172",
+        "annotator_1": "reject",
+        "annotator_2": "reject",
+        "adjudication": "reject",
+        "final_status": "accept",
+        "reasons": [
+          "adjudication != final_status",
+          "annotator_1 != final_status",
+          "annotator_2 != final_status"
+        ],
+        "notes": "हाँ, दोनों वाक्य पूरी तरह से स्वतंत्र (independent) और व्याकरणिक रूप से मान्य (valid) हैं।"
+      },
+      {
+        "excel_row": 181,
+        "pair_id": "HC_0180",
+        "annotator_1": "reject",
+        "annotator_2": "reject",
+        "adjudication": "reject",
+        "final_status": "accept",
+        "reasons": [
+          "adjudication != final_status",
+          "annotator_1 != final_status",
+          "annotator_2 != final_status"
+        ],
+        "notes": "हाँ, दोनों वाक्य पूरी तरह से स्वतंत्र (independent) और व्याकरणिक रूप से मान्य (valid) हैं।"
+      },
+      {
+        "excel_row": 187,
+        "pair_id": "HC_0186",
+        "annotator_1": "reject",
+        "annotator_2": "reject",
+        "adjudication": "reject",
+        "final_status": "accept",
+        "reasons": [
+          "adjudication != final_status",
+          "annotator_1 != final_status",
+          "annotator_2 != final_status"
+        ],
+        "notes": "हाँ, दोनों वाक्य पूरी तरह से स्वतंत्र (independent) और व्याकरणिक रूप से मान्य (valid) हैं।"
+      }
+    ],
+    "policy_note": "Disagreements are reported for human review only and are not automatically resolved."
+  },
+  "devanagari_diagnostics": {
+    "metrics": {
+      "original_sentence_with_devanagari": 200,
+      "contrast_sentence_with_devanagari": 200,
+      "target_original_with_devanagari": 200,
+      "target_contrast_with_devanagari": 200,
+      "intended_meaning_hi_with_devanagari": 200,
+      "rows_without_devanagari_sentences": []
+    },
+    "policy_note": "Devanagari presence is a diagnostic indicator, not an automatic rejection rule."
+  }
+}

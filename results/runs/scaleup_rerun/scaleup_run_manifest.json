@@ -1,0 +1,320 @@
+{
+  "start_time_utc": "2026-11-02T16:59:25.929026+00:00",
+  "run_id": "scaleup_rerun",
+  "system_environment": {
+    "os": "Windows-11-10.0.26300-SP0",
+    "python_version": "3.13.5 (tags/v3.13.5:6cb20a2, Jun 11 2025, 16:15:46) [MSC v.1943 64 bit (AMD64)]",
+    "pytorch_version": "2.14.1+cu126",
+    "cuda_version": "12.6",
+    "gpu_name": "NVIDIA GeForce RTX 3050 6GB Laptop GPU",
+    "device": "cuda",
+    "library_versions": {
+      "python": "3.13.5",
+      "platform": "Windows-11-10.0.26300-SP0",
+      "transformers": "5.19.0",
+      "tokenizers": "0.23.3",
+      "sentencepiece": "not_installed",
+      "openpyxl": "not_installed"
+    }
+  },
+  "datasets": {
+    "primary": {
+      "path": "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\data\\final\\PRIMARY_BENCHMARK_ADJUDICATED.csv",
+      "sha256": "b769ccd82ee00b7930c8f32a7666e5d16897d0afc8c10c1cc97633334717fe18",
+      "parsed_row_count": 1679,
+      "unique_id_count": 1679,
+      "has_duplicates": false
+    },
+    "template": {
+      "path": "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\data\\final\\TEMPLATE_SENSITIVITY_BENCHMARK.csv",
+      "sha256": "b88160d39d1f7133391ff3aceff1faa2f157310833490e3765ae635c17e0155a",
+      "parsed_row_count": 1957,
+      "unique_id_count": 1957,
+      "has_duplicates": false
+    },
+    "auxiliary": {
+      "path": "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\data\\final\\AUXILIARY_MULTIWORD_PROBE.csv",
+      "sha256": "208aabab0056f8287297d8800462c703afc7506f0d3e5fd5e7ff08fc23cf096e",
+      "parsed_row_count": 12,
+      "unique_id_count": 12,
+      "has_duplicates": false
+    }
+  },
+  "models": [
+    {
+      "id": "google/muril-base-cased",
+      "frozen": true,
+      "type": "pretrained_mlm"
+    },
+    {
+      "id": "FacebookAI/xlm-roberta-base",
+      "frozen": true,
+      "type": "pretrained_mlm"
+    }
+  ],
+  "stages": {
+    "stage1_tokenization": {
+      "description": "Primary Benchmark Tokenization & Fragmentation",
+      "sample_size": 1679,
+      "total_evaluations": 3358,
+      "start_time_utc": "2026-11-02T16:59:25.988941+00:00",
+      "end_time_utc": "2026-11-02T16:59:26.158396+00:00",
+      "elapsed_seconds": 0.17,
+      "output_files": [
+        "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\results\\runs\\scaleup_rerun\\tokenization\\tokenization_results.csv",
+        "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\results\\runs\\scaleup_rerun\\tokenization\\run_metadata.json"
+      ],
+      "completed_successfully": true
+    },
+    "stage2_pll_scoring": {
+      "description": "Pretrained Model Pseudo-Log-Likelihood Scoring",
+      "sample_size": 1679,
+      "total_evaluations": 3358,
+      "start_time_utc": "2026-11-02T16:59:26.159138+00:00",
+      "end_time_utc": "2026-11-02T16:59:26.339291+00:00",
+      "elapsed_seconds": 0.18,
+      "output_files": [
+        "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\results\\runs\\scaleup_rerun\\scoring\\pll_scoring_results.csv",
+        "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\results\\runs\\scaleup_rerun\\scoring\\run_metadata.json"
+      ],
+      "completed_successfully": true
+    },
+    "stage3_combined_analysis": {
+      "description": "Combined Statistical Analysis and Hypothesis Testing",
+      "merged_rows": 3358,
+      "warnings_count": 0,
+      "figures_dir": "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\results\\runs\\scaleup_rerun\\analysis\\figures",
+      "start_time_utc": "2026-11-02T16:59:26.339991+00:00",
+      "end_time_utc": "2026-11-02T16:59:28.830577+00:00",
+      "elapsed_seconds": 2.49,
+      "completed_successfully": true
+    },
+    "stage4_explanation_stability": {
+      "description": "Explanation Stability: Attention and Integrated Gradients (Spelling Track)",
+      "track_evaluated": "REALISTIC_SPELLING_ERROR",
+      "sample_size": 1005,
+      "total_pair_evaluations": 4020,
+      "output_dir": "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\results\\runs\\scaleup_rerun\\stability",
+      "start_time_utc": "2026-11-02T16:59:28.831161+00:00",
+      "end_time_utc": "2026-11-02T17:01:09.356955+00:00",
+      "elapsed_seconds": 100.53,
+      "completed_successfully": true
+    },
+    "stage5_faithfulness": {
+      "description": "Visible-Target Faithfulness via Context Erasure (Spelling Track)",
+      "track_evaluated": "REALISTIC_SPELLING_ERROR",
+      "sample_size": 1005,
+      "total_interventions": 72360,
+      "output_dir": "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\results\\runs\\scaleup_rerun\\faithfulness",
+      "start_time_utc": "2026-11-02T17:01:09.357717+00:00",
+      "end_time_utc": "2026-11-02T17:23:42.128184+00:00",
+      "elapsed_seconds": 1352.77,
+      "completed_successfully": true
+    },
+    "stage6_dashboard_data": {
+      "description": "Unified Master Tables and Dashboard Artifacts",
+      "pair_master_row_count": 3358,
+      "dashboard_dir": "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\results\\runs\\scaleup_rerun\\dashboard_data",
+      "start_time_utc": "2026-11-02T17:23:42.129449+00:00",
+      "end_time_utc": "2026-11-02T17:23:43.755914+00:00",
+      "elapsed_seconds": 1.63,
+      "completed_successfully": true
+    },
+    "stage7_figures_generation": {
+      "description": "Publication Figures 1-8 Generation",
+      "figures_generated": [
+        "fig6_explanation_stability.png",
+        "fig7_faithfulness_interventions.png",
+        "fig8_stability_vs_faithfulness.png",
+        "fig1_delta_meanlp_by_track.png",
+        "fig2_token_delta_vs_meanlp.png",
+        "fig3_target_token_delta_vs_meanlp.png",
+        "fig4_model_comparison_scatter.png",
+        "fig5_direction_agreement.png"
+      ],
+      "all_figures_dir": "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\results\\runs\\scaleup_rerun\\figures",
+      "start_time_utc": "2026-11-02T17:23:43.756864+00:00",
+      "end_time_utc": "2026-11-02T17:23:45.686745+00:00",
+      "elapsed_seconds": 1.93,
+      "completed_successfully": true
+    },
+    "stage8_template_sensitivity": {
+      "description": "Secondary Template Sensitivity Benchmark (N=1,957)",
+      "sample_size": 1957,
+      "output_dir": "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\results\\runs\\scaleup_rerun\\template_sensitivity",
+      "start_time_utc": "2026-11-02T17:23:45.687495+00:00",
+      "end_time_utc": "2026-11-02T17:28:47.644143+00:00",
+      "elapsed_seconds": 301.96,
+      "completed_successfully": true
+    },
+    "stage9_auxiliary_multiword_probe": {
+      "description": "Auxiliary Multiword Probe (N=12)",
+      "sample_size": 12,
+      "output_dir": "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\results\\runs\\scaleup_rerun\\auxiliary_probe",
+      "start_time_utc": "2026-11-02T17:28:47.644768+00:00",
+      "end_time_utc": "2026-11-02T17:29:06.820450+00:00",
+      "elapsed_seconds": 19.17,
+      "completed_successfully": true
+    }
+  },
+  "gpu_inference_telemetry": {
+    "stage2_pll_scoring": {
+      "cuda_available": true,
+      "gpu_name": "NVIDIA GeForce RTX 3050 6GB Laptop GPU",
+      "cuda_version": "12.6",
+      "pytorch_version": "2.14.1+cu126",
+      "model_parameters": {
+        "google/muril-base-cased": {
+          "actual_param_device": "cuda:0",
+          "input_tensor_device": "cuda",
+          "is_cuda": true
+        },
+        "FacebookAI/xlm-roberta-base": {
+          "actual_param_device": "cuda:0",
+          "input_tensor_device": "cuda",
+          "is_cuda": true
+        }
+      },
+      "batch_size": 32,
+      "examples_processed": 3358,
+      "start_time_utc": "2026-11-02T16:59:26.159138+00:00",
+      "end_time_utc": "2026-11-02T16:59:26.339274+00:00",
+      "elapsed_seconds": 0.18,
+      "completed_successfully": true,
+      "cpu_fallback": false,
+      "device_transfer_errors": 0,
+      "peak_vram_mb": 0.0,
+      "reserved_vram_mb": 0.0
+    },
+    "stage4_explanation_stability": {
+      "cuda_available": true,
+      "gpu_name": "NVIDIA GeForce RTX 3050 6GB Laptop GPU",
+      "cuda_version": "12.6",
+      "pytorch_version": "2.14.1+cu126",
+      "model_parameters": {
+        "google/muril-base-cased": {
+          "model_name": "google/muril-base-cased",
+          "actual_param_device": "cuda:0",
+          "input_tensor_device": "cuda",
+          "param_dtype": "torch.float32",
+          "num_parameters": 237755045,
+          "is_cuda": true
+        },
+        "FacebookAI/xlm-roberta-base": {
+          "model_name": "FacebookAI/xlm-roberta-base",
+          "actual_param_device": "cuda:0",
+          "input_tensor_device": "cuda",
+          "param_dtype": "torch.float32",
+          "num_parameters": 278295186,
+          "is_cuda": true
+        }
+      },
+      "batch_size": 1,
+      "examples_processed": 4020,
+      "start_time_utc": "2026-11-02T16:59:28.831161+00:00",
+      "end_time_utc": "2026-11-02T17:01:09.356912+00:00",
+      "elapsed_seconds": 100.53,
+      "completed_successfully": true,
+      "cpu_fallback": false,
+      "device_transfer_errors": 0,
+      "peak_vram_mb": 1927.82,
+      "reserved_vram_mb": 3792.0
+    },
+    "stage5_faithfulness": {
+      "cuda_available": true,
+      "gpu_name": "NVIDIA GeForce RTX 3050 6GB Laptop GPU",
+      "cuda_version": "12.6",
+      "pytorch_version": "2.14.1+cu126",
+      "batch_size": 1,
+      "total_interventions": 72360,
+      "interventions_per_sentence": 36,
+      "fractions": [
+        0.1,
+        0.2,
+        0.3
+      ],
+      "start_time_utc": "2026-11-02T17:01:09.357717+00:00",
+      "end_time_utc": "2026-11-02T17:23:42.128113+00:00",
+      "elapsed_seconds": 1352.77,
+      "completed_successfully": true,
+      "cpu_fallback": false,
+      "device_transfer_errors": 0,
+      "peak_vram_mb": 2110.29,
+      "reserved_vram_mb": 5208.0
+    },
+    "stage8_template_sensitivity": {
+      "cuda_available": true,
+      "gpu_name": "NVIDIA GeForce RTX 3050 6GB Laptop GPU",
+      "cuda_version": "12.6",
+      "pytorch_version": "2.14.1+cu126",
+      "model_parameters": {
+        "FacebookAI/xlm-roberta-base": {
+          "model_name": "FacebookAI/xlm-roberta-base",
+          "actual_param_device": "cuda:0",
+          "input_tensor_device": "cuda",
+          "param_dtype": "torch.float32",
+          "num_parameters": 278295186,
+          "is_cuda": true
+        },
+        "google/muril-base-cased": {
+          "model_name": "google/muril-base-cased",
+          "actual_param_device": "cuda:0",
+          "input_tensor_device": "cuda",
+          "param_dtype": "torch.float32",
+          "num_parameters": 237755045,
+          "is_cuda": true
+        }
+      },
+      "batch_size": 32,
+      "examples_processed": 3914,
+      "start_time_utc": "2026-11-02T17:23:45.687495+00:00",
+      "end_time_utc": "2026-11-02T17:28:47.644083+00:00",
+      "elapsed_seconds": 301.96,
+      "completed_successfully": true,
+      "cpu_fallback": false,
+      "device_transfer_errors": 0,
+      "peak_vram_mb": 1425.69,
+      "reserved_vram_mb": 36.0
+    },
+    "stage9_auxiliary_multiword_probe": {
+      "cuda_available": true,
+      "gpu_name": "NVIDIA GeForce RTX 3050 6GB Laptop GPU",
+      "cuda_version": "12.6",
+      "pytorch_version": "2.14.1+cu126",
+      "model_parameters": {
+        "FacebookAI/xlm-roberta-base": {
+          "model_name": "FacebookAI/xlm-roberta-base",
+          "actual_param_device": "cuda:0",
+          "input_tensor_device": "cuda",
+          "param_dtype": "torch.float32",
+          "num_parameters": 278295186,
+          "is_cuda": true
+        },
+        "google/muril-base-cased": {
+          "model_name": "google/muril-base-cased",
+          "actual_param_device": "cuda:0",
+          "input_tensor_device": "cuda",
+          "param_dtype": "torch.float32",
+          "num_parameters": 237755045,
+          "is_cuda": true
+        }
+      },
+      "batch_size": 16,
+      "examples_processed": 24,
+      "start_time_utc": "2026-11-02T17:28:47.644768+00:00",
+      "end_time_utc": "2026-11-02T17:29:06.820386+00:00",
+      "elapsed_seconds": 19.17,
+      "completed_successfully": true,
+      "cpu_fallback": false,
+      "device_transfer_errors": 0,
+      "peak_vram_mb": 1174.89,
+      "reserved_vram_mb": 36.0
+    }
+  },
+  "end_time_utc": "2026-11-02T17:29:06.820495+00:00",
+  "total_elapsed_seconds": 1780.99,
+  "total_elapsed_minutes": 29.68,
+  "completed_successfully": true,
+  "error_count": 0,
+  "warning_count": 0
+}

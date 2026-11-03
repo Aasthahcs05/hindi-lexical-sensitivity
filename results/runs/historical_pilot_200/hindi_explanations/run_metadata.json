@@ -1,0 +1,32 @@
+{
+  "run_timestamp_utc": "2026-10-19T15:17:03.579206+00:00",
+  "input_dataset": "data\\raw\\hindi_lexical_sensitivity_cleaned.xlsx",
+  "input_sha256": "f9a5af81e21624de47ead7feabba412149939c1eb9934f8fc2b8d452a232cd44",
+  "model_name": "google/muril-base-cased",
+  "model_architecture": "BertForMaskedLM",
+  "device": "cpu",
+  "target_definition": "scalar_mlm_target_token_logit_at_masked_position",
+  "explanation_methods": [
+    "Self-Attention (mean across heads at final layer)",
+    "LayerIntegratedGradients (embedding layer)"
+  ],
+  "pilot_size": 12,
+  "eligible_cases": 9,
+  "ineligible_cases": 3,
+  "ig_n_steps": 20,
+  "ig_baseline": "pad_with_target_masked",
+  "library_versions": {
+    "python": "3.12.10",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "transformers": "4.57.6",
+    "tokenizers": "0.22.2",
+    "sentencepiece": "0.2.2",
+    "openpyxl": "3.1.5"
+  },
+  "output_files": [
+    "outputs\\hindi_explanations\\pilot_explanations.csv",
+    "outputs\\hindi_explanations\\run_metadata.json",
+    "outputs\\hindi_explanations\\summary.md"
+  ],
+  "completed_successfully": true
+}

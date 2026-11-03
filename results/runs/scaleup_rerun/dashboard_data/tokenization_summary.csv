@@ -1,0 +1,7 @@
+model_name,track,pair_count,mean_orig_tokens,mean_cont_tokens,mean_delta_tokens,mean_length_ratio,mean_orig_target_subwords,mean_cont_target_subwords,pct_single_subword_orig_target,pct_single_subword_cont_target
+FacebookAI/xlm-roberta-base,REALISTIC_SPELLING_ERROR,1005,10.91,11.96,1.04,1.11,1.63,2.67,62.3,6.4
+FacebookAI/xlm-roberta-base,SYNONYM_SUBSTITUTION,362,9.15,9.33,0.18,1.03,1.29,1.47,77.3,68.2
+FacebookAI/xlm-roberta-base,VALID_WORD_CONTEXT,312,10.48,10.7,0.22,1.02,1.68,1.89,44.6,30.8
+google/muril-base-cased,REALISTIC_SPELLING_ERROR,1005,9.67,10.8,1.13,1.12,1.12,2.25,91.7,20.1
+google/muril-base-cased,SYNONYM_SUBSTITUTION,362,8.43,8.52,0.1,1.01,1.02,1.11,98.6,92.8
+google/muril-base-cased,VALID_WORD_CONTEXT,312,9.2,9.31,0.11,1.01,1.36,1.46,70.5,59.6

@@ -445,6 +445,9 @@ def evaluate_faithfulness_interventions(
     n_context = len(context_indices)
     results: list[dict[str, Any]] = []
 
+    intervention_items: list[tuple[float, int, str, list[int]]] = []
+    batch_input_ids: list[torch.Tensor] = []
+
     for frac in fractions:
         k = compute_k_for_fraction(n_context, frac)
 
@@ -460,49 +463,58 @@ def evaluate_faithfulness_interventions(
         rng = random.Random(seed_val)
         random_k_indices = rng.sample(context_indices, k)
 
-        intervention_map = {
-            "top_k": top_k_indices,
-            "bottom_k": bottom_k_indices,
-            "random_k": random_k_indices,
-        }
-
-        for int_type, chosen_indices in intervention_map.items():
+        for int_type, chosen_indices in [
+            ("top_k", top_k_indices),
+            ("bottom_k", bottom_k_indices),
+            ("random_k", random_k_indices),
+        ]:
             intervened_ids = input_ids.clone()
             for idx in chosen_indices:
-                # Target positions are never masked
                 if idx not in target_indices:
                     intervened_ids[0, idx] = mask_token_id
+            batch_input_ids.append(intervened_ids[0])
+            intervention_items.append((frac, k, int_type, chosen_indices))
 
-            int_scores = calculate_visible_target_score(
-                model=model,
-                input_ids=intervened_ids,
-                attention_mask=attention_mask,
-                target_indices=target_indices,
-                target_token_ids=target_token_ids,
-            )
-            int_logit = int_scores["mean_logit"]
-            int_logp = int_scores["mean_logp"]
+    if batch_input_ids:
+        batch_ids_tensor = torch.stack(batch_input_ids, dim=0)
+        batch_mask_tensor = attention_mask.expand(len(batch_input_ids), -1)
+        with torch.no_grad():
+            out = model(input_ids=batch_ids_tensor, attention_mask=batch_mask_tensor)
+            logits = out.logits if hasattr(out, "logits") else out
 
-            logit_drop = s0_logit - int_logit
-            abs_logit_drop = abs(logit_drop)
-            logp_drop = s0_logp - int_logp
+            for i, (frac, k, int_type, chosen_indices) in enumerate(intervention_items):
+                subword_logits: list[float] = []
+                subword_logps: list[float] = []
+                for pos, tid in zip(target_indices, target_token_ids):
+                    l_val = logits[i, pos, tid].item()
+                    subword_logits.append(float(l_val))
+                    logp_val = torch.log_softmax(logits[i, pos, :], dim=-1)[tid].item()
+                    subword_logps.append(float(logp_val))
 
-            chosen_tokens_text = [tokens[i] for i in chosen_indices]
+                n_t = len(target_indices)
+                int_logit = sum(subword_logits) / n_t if n_t > 0 else 0.0
+                int_logp = sum(subword_logps) / n_t if n_t > 0 else 0.0
 
-            results.append({
-                "fraction": frac,
-                "k_tokens": k,
-                "intervention_type": int_type,
-                "masked_token_indices": json.dumps(chosen_indices),
-                "masked_tokens_text": json.dumps(chosen_tokens_text, ensure_ascii=False),
-                "baseline_target_logit_mean": round(s0_logit, 4),
-                "baseline_target_logp_mean": round(s0_logp, 4),
-                "intervened_target_logit_mean": round(int_logit, 4),
-                "intervened_target_logp_mean": round(int_logp, 4),
-                "logit_drop": round(logit_drop, 4),
-                "abs_logit_drop": round(abs_logit_drop, 4),
-                "logp_drop": round(logp_drop, 4),
-            })
+                logit_drop = s0_logit - int_logit
+                abs_logit_drop = abs(logit_drop)
+                logp_drop = s0_logp - int_logp
+
+                chosen_tokens_text = [tokens[idx] for idx in chosen_indices]
+
+                results.append({
+                    "fraction": frac,
+                    "k_tokens": k,
+                    "intervention_type": int_type,
+                    "masked_token_indices": json.dumps(chosen_indices),
+                    "masked_tokens_text": json.dumps(chosen_tokens_text, ensure_ascii=False),
+                    "baseline_target_logit_mean": round(s0_logit, 4),
+                    "baseline_target_logp_mean": round(s0_logp, 4),
+                    "intervened_target_logit_mean": round(int_logit, 4),
+                    "intervened_target_logp_mean": round(int_logp, 4),
+                    "logit_drop": round(logit_drop, 4),
+                    "abs_logit_drop": round(abs_logit_drop, 4),
+                    "logp_drop": round(logp_drop, 4),
+                })
 
     return results
 
@@ -1001,8 +1013,10 @@ def run_stage7_faithfulness_experiment(
     if fractions is None:
         fractions = DEFAULT_FRACTIONS
 
+    output_dir = Path(output_dir)
+    input_path = Path(input_path)
     output_dir.mkdir(parents=True, exist_ok=True)
-    device = torch.device("cpu")
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     input_sha256 = compute_file_sha256(input_path)
     all_rows = load_dataset_rows(input_path)
@@ -1057,8 +1071,12 @@ def run_stage7_faithfulness_experiment(
                     stability_data[(p_id, model_name, "integrated_gradients")] = stab
 
             completed_keys.add(eval_key)
-            with open(checkpoint_file, "w", encoding="utf-8") as f:
-                json.dump({"completed_evaluations": sorted(list(completed_keys))}, f, indent=2)
+            if len(completed_keys) % 50 == 0:
+                with open(checkpoint_file, "w", encoding="utf-8") as f:
+                    json.dump({"completed_evaluations": sorted(list(completed_keys))}, f, indent=2)
+
+        with open(checkpoint_file, "w", encoding="utf-8") as f:
+            json.dump({"completed_evaluations": sorted(list(completed_keys))}, f, indent=2)
 
         # Free model memory before loading next
         del model

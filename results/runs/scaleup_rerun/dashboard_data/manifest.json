@@ -1,0 +1,19 @@
+{
+  "dataset_sha256": "b769ccd82ee00b7930c8f32a7666e5d16897d0afc8c10c1cc97633334717fe18",
+  "total_source_pairs": 1679,
+  "dashboard_files_generated": [
+    "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\results\\runs\\scaleup_rerun\\dashboard_data\\dataset_overview.json",
+    "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\results\\runs\\scaleup_rerun\\dashboard_data\\dataset_tracks.csv",
+    "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\results\\runs\\scaleup_rerun\\dashboard_data\\tokenization_summary.csv",
+    "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\results\\runs\\scaleup_rerun\\dashboard_data\\scoring_summary.csv",
+    "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\results\\runs\\scaleup_rerun\\dashboard_data\\stability_summary.csv",
+    "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\results\\runs\\scaleup_rerun\\dashboard_data\\faithfulness_summary.csv",
+    "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\results\\runs\\scaleup_rerun\\dashboard_data\\pair_level_master.csv",
+    "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\results\\runs\\scaleup_rerun\\dashboard_data\\eligibility_master.csv",
+    "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\results\\runs\\scaleup_rerun\\dashboard_data\\stability_faithfulness_relationship.csv",
+    "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\results\\runs\\scaleup_rerun\\dashboard_data\\scientific_audit_report.md"
+  ],
+  "pair_master_row_count": 3358,
+  "eligibility_master_row_count": 3358,
+  "audit_completed_successfully": true
+}

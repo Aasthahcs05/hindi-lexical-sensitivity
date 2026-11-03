@@ -1,0 +1,53 @@
+{
+  "run_timestamp_utc": "2026-11-02T17:29:06.792325+00:00",
+  "stage": 4,
+  "description": "Combined statistical analysis of Hindi tokenization and PLL results",
+  "completed_successfully": true,
+  "validation_warnings": [],
+  "input_sha256": "208aabab0056f8287297d8800462c703afc7506f0d3e5fd5e7ff08fc23cf096e",
+  "input_files": {
+    "xlsx": "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\data\\final\\AUXILIARY_MULTIWORD_PROBE.csv",
+    "tokenization_csv": "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\results\\runs\\scaleup_rerun\\auxiliary_probe\\tokenization\\tokenization_results.csv",
+    "tokenization_sha256": "8200e0eae5819837dd46eaa1be2241909301a13e5071552a5fab940ba8355ea4",
+    "pll_csv": "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\results\\runs\\scaleup_rerun\\auxiliary_probe\\scoring\\pll_scoring_results.csv",
+    "pll_sha256": "07e9a6d78700d7932b44108066ff385a15db9cda3e3d8bcdd824743cd7ac6d80"
+  },
+  "output_files": {
+    "combined_csv": "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\results\\runs\\scaleup_rerun\\auxiliary_probe\\analysis\\combined_pair_level_results.csv",
+    "combined_rows": 24,
+    "combined_sha256": "245ffb09ebac57407e70340d32169f4b5040c7773dbdaa67500fe3fb3d3c9034"
+  },
+  "figures_created": [
+    "fig1_delta_meanlp_by_track.png",
+    "fig2_token_delta_vs_meanlp.png",
+    "fig3_target_token_delta_vs_meanlp.png",
+    "fig4_model_comparison_scatter.png",
+    "fig5_direction_agreement.png"
+  ],
+  "analysis_settings": {
+    "models": [
+      "FacebookAI/xlm-roberta-base",
+      "google/muril-base-cased"
+    ],
+    "tracks": [
+      "VALID_WORD_CONTEXT",
+      "SYNONYM_SUBSTITUTION",
+      "REALISTIC_SPELLING_ERROR"
+    ],
+    "sign_convention": "delta = contrast - original",
+    "primary_outcome": "delta_mean_log_prob",
+    "secondary_outcome": "delta_pll_sum",
+    "correlation_method": "spearman",
+    "multiple_testing_correction": "benjamini_hochberg_alpha_0.05",
+    "cross_model_pll_comparison": "not_performed"
+  },
+  "library_versions": {
+    "python": "3.13.5",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "numpy": "2.3.1",
+    "scipy": "1.16.0",
+    "matplotlib": "3.10.3",
+    "transformers": "5.19.0",
+    "openpyxl": "not_installed"
+  }
+}

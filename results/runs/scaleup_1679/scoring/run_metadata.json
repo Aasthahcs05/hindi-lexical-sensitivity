@@ -1,0 +1,48 @@
+{
+  "run_timestamp_utc": "2026-11-02T15:32:12.328148+00:00",
+  "run_type": "full",
+  "completed_successfully": true,
+  "elapsed_seconds": 206.98489785194397,
+  "device": "cuda",
+  "batch_size": 32,
+  "models": [
+    "FacebookAI/xlm-roberta-base",
+    "google/muril-base-cased"
+  ],
+  "model_details": {
+    "FacebookAI/xlm-roberta-base": {
+      "model_class": "XLMRobertaForMaskedLM",
+      "tokenizer_class": "XLMRobertaTokenizer",
+      "vocab_size": 250002,
+      "status": "computed"
+    },
+    "google/muril-base-cased": {
+      "model_class": "BertForMaskedLM",
+      "tokenizer_class": "BertTokenizer",
+      "vocab_size": 197258,
+      "status": "computed"
+    }
+  },
+  "library_versions": {
+    "python": "3.13.5",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "transformers": "5.19.0",
+    "tokenizers": "0.23.3",
+    "sentencepiece": "not_installed",
+    "openpyxl": "not_installed"
+  },
+  "input_file": {
+    "path": "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\data\\final\\PRIMARY_BENCHMARK_ADJUDICATED.csv",
+    "sha256": "b769ccd82ee00b7930c8f32a7666e5d16897d0afc8c10c1cc97633334717fe18",
+    "non_empty_rows": 1679
+  },
+  "scored_pairs_count": 1679,
+  "total_evaluations": 3358,
+  "output_files": {
+    "csv_path": "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\results\\runs\\scaleup_1679\\scoring\\pll_scoring_results.csv",
+    "csv_sha256": "7989bc10a78f57605fb551a0b86b6bb56f835f242c11d254924ea68bef199c4e",
+    "metadata_path": "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\results\\runs\\scaleup_1679\\scoring\\run_metadata.json",
+    "summary_path": "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\results\\runs\\scaleup_1679\\scoring\\summary.md",
+    "checkpoint_path": "C:\\Users\\Friends\\Downloads\\hindi-lexical-sensitivity (3)\\hindi-lexical-sensitivity\\results\\runs\\scaleup_1679\\scoring\\checkpoint.json"
+  }
+}
