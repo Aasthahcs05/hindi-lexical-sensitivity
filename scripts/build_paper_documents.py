@@ -226,6 +226,7 @@ def build_pdf():
 
         def save(self):
             num_pages = len(self._saved_page_states)
+            print(f"Research paper PDF total pages rendered: {num_pages}")
             for state in self._saved_page_states:
                 self.__dict__.update(state)
                 self.draw_page_number(num_pages)
